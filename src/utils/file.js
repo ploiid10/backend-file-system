@@ -81,7 +81,7 @@ exports.file = async (req, res) => {
   const fileName = req.params.filename;
   const token = req.query.token;
   const decoded = jwt.verify(token, SECRET_KEY);
-  const filePath = path.join(__dirname, '../uploads', fileName);
+  const filePath = path.join(__dirname, '../src/uploads', fileName);
   // Check if the file exists
   fs.access(filePath, fs.constants.R_OK, async (err) => {
     if (err) {
