@@ -63,12 +63,23 @@ exports.files = async (req, res) => {
 
 exports.file = async (req, res) => {
   const fileName = req.params.filename;
+  const token = req.query.token;
+  const decoded = jwt.verify(token, SECRET_KEY);
   const filePath = path.join(__dirname, '../uploads', fileName);
   // Check if the file exists
-  fs.access(filePath, fs.constants.R_OK, (err) => {
+  fs.access(filePath, fs.constants.R_OK, async (err) => {
     if (err) {
       res.status(404).json({ error: 'File not found' });
     } else {
+      try {
+        await File.findByIdAndUpdate(
+          decoded.fileId,  // Find the file by its ID
+          { $inc: { views: 1 } },  // Increment the views by 1
+          { new: true }  // Return the updated document
+        );
+      } catch (err) {
+        console.log(err)
+      }
       res.sendFile(filePath);  // Serve the specific file
     }
   });
