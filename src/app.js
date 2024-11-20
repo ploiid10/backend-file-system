@@ -26,6 +26,8 @@ app.use(bodyParser.json());
 app.use('/api/user', user);
 app.use('/api/files', fileRoutes);
 
+app.use('/', (req, res) => res.send('Welcome to the backend app'))
+
 mongoose
   .connect(DB_URL)
   .then(() => console.log('MongoDB connected'))
