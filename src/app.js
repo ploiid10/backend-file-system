@@ -20,6 +20,7 @@ if (!fs.existsSync(uploadDir)) {
 }
 app.use(cors({
   credentials: true,
+  origin: 'http://142.93.108.126:4000',
   allowedHeaders: ['Content-Type', 'Authorization'],
 })); // Enable CORS for all routes
 app.use(bodyParser.json());
