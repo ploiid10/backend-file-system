@@ -18,11 +18,7 @@ const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
-app.use(cors({
-  credentials: true,
-  origin: 'http://142.93.108.126:4000',
-  allowedHeaders: ['Content-Type', 'Authorization'],
-})); // Enable CORS for all routes
+app.use(cors()); // Enable CORS for all routes
 app.use(bodyParser.json());
 app.use('/api/user', user);
 app.use('/api/files', fileRoutes);
