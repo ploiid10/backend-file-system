@@ -4,6 +4,21 @@ const path = require('path');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = require('../constants');
+const os = require('os');
+// Function to get the local IP address
+function getLocalIP() {
+  const networkInterfaces = os.networkInterfaces();
+  for (const interfaceName in networkInterfaces) {
+    for (const iface of networkInterfaces[interfaceName]) {
+      // Check for non-internal IPv4 address
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return iface.address;
+      }
+    }
+  }
+  return 'localhost'; // Fallback if no external IP is found
+}
+
 
 // Configure Multer for file uploads
 const storage = multer.diskStorage({
@@ -134,9 +149,10 @@ exports.fileShareable = async (req, res) => {
 
   // Generate the JWT
   const token = jwt.sign(payload, SECRET_KEY);
-
+  // Get the current IP address
+  const currentIp = getLocalIP();
   // Create the shareable link
-  const shareableLink = `http://localhost:3000/api/files/${file.filename}?token=${token}`;
+  const shareableLink = `http://${currentIp}:3000/api/files/${file.filename}?token=${token}`;
 
   res.json({ shareableLink });
 }
